@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mouse Effects</title>
+  <script src="./mouse-effect-engine.js"></script>
+  <style>
+    body { margin: 0; overflow: hidden; background: #111; color: white; }
+    button { position: fixed; top: 10px; left: 10px; margin: 5px; z-index: 99999; }
+  </style>
+</head>
+<body>
+<svg style="display:none;">
+  <filter id="meg-distort-filter">
+    <feTurbulence id="meg-turb" type="turbulence" baseFrequency="0.02 0.03" numOctaves="2" seed="2" result="turb"/>
+    <feDisplacementMap in2="turb" in="SourceGraphic" scale="25" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
+
+  <button onclick="engine.enableEffect('waveTrail')">Activar Wave Trail</button><br>
+  <button onclick="engine.disableEffect('waveTrail')">Desactivar Wave Trail</button><br>
+  <button onclick="engine.enableEffect('particleTrail')">Activar Particle Trail</button><br>
+  <button onclick="engine.disableEffect('particleTrail')">Desactivar Particle Trail</button>
+
+  <script>
+
+    const effect = 4;
+
+
+    if(effect==1) {
+      const engine = new MouseEffectEngine("gridGlow", {
+        size: 40,
+        baseColor: "#ff0000",
+        zIndex: 20,
+        blur: "4px",
+        growSpeed: 1,
+        shrinkSpeed: 2
+      });      
+    }
+    
+
+    if(effect==2) { 
+      const engine2 = new MouseEffectEngine("waveTrail", {
+        trailColor: "rgba(0, 200, 255, 0.5)",
+        trailSize: 20,
+        lifetime: 600,
+        zIndex: 2000
+      });
+    }
+
+    if(effect==3) { 
+      const engine3 = new MouseEffectEngine("particleTrail", {
+        particleCount: 4,
+        size: 8,
+        color: "#ffdd00",
+        lifetime: 800,
+        zIndex: 3000
+      });
+    }
+
+    if(effect==4) { 
+      const engine = new MouseEffectEngine("stars", {
+        starCount: 200,
+        color: "#ffffff",
+        size: 3,
+        speed: 2,
+        perspective: 1000,
+        zIndex: 1
+      });
+    }
+
+    if(effect==5) { 
+      const engine = new MouseEffectEngine("screenDistort", {
+        intensity: 20,       // Distorsión máxima en px
+        duration: 250,       // Duración de cada distorsión en ms
+        minInterval: 1500,   // Mínimo tiempo entre distorsiones
+        maxInterval: 5000    // Máximo tiempo entre distorsiones
+      });
+    }
+
+
+
+
+/*
+    const engine = new MouseEffectEngine("gridGlow", {
+      size: 40,
+      baseColor: "#000",
+      zIndex: 1000
+    });
+
+    // Activar otros efectos después
+    engine.enableEffect("waveTrail", {
+      trailColor: "rgba(255, 255, 255, 0.3)",
+      trailSize: 15,
+      lifetime: 500
+    });
+
+    engine.enableEffect("particleTrail", {
+      particleCount: 3,
+      size: 6,
+      color: "#ff69b4",
+      lifetime: 1000
+    });
+*/
+
+
+
+    // Activar/desactivar otros efectos desde botones
+  </script>
+</body>
+</html>

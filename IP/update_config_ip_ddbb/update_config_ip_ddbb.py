@@ -35,6 +35,8 @@ from tkinter import messagebox, filedialog, simpledialog
 import os
 import logging
 import configparser
+import pyperclip
+
 
 CONFIG_FILE = "update_config_ip_ddbb.config"
 LOG_FILE = "update_config_ip_ddbb.log"
@@ -145,6 +147,21 @@ def actualizar_archivos(ip_elegida, archivos, patron_regex):
         reemplazar_ip_en_fichero(archivo, ip_elegida, patron_regex)
     log_event(f"Actualización completada para la IP {ip_elegida} en los archivos seleccionados.")
     messagebox.showinfo("Actualización completada", f"IPs actualizadas a {ip_elegida} en los ficheros indicados.")
+
+def copiar_ip_menu():
+    seleccion = lista_ips.curselection()
+    if seleccion:
+        ip_texto = lista_ips.get(seleccion[0])
+        # Extraer solo la IP si tiene descripción
+        ip_real = ip_texto.split(' - ')[0] if ' - ' in ip_texto else ip_texto
+        pyperclip.copy(ip_real)
+        messagebox.showinfo("Copiado", f"IP {ip_real} copiada al portapapeles.")
+
+def mostrar_menu_contextual(event):
+    seleccion = lista_ips.nearest(event.y)
+    lista_ips.selection_clear(0, tk.END)
+    lista_ips.selection_set(seleccion)
+    context_menu.tk_popup(event.x_root, event.y_root)
 
 def refrescar_lista_ips():
     lista_ips.delete(0, tk.END)
@@ -424,11 +441,11 @@ def gestionar_patrones():
 # Interfaz gráfica
 root = tk.Tk()
 root.title("Actualizador de IP en archivos")
-root.geometry("1100x800")
+root.geometry("1100x650")
 root.resizable(False, False)
 
 fuente_grande = ("Arial", 20)
-fuente_lista = ("Consolas", 20)
+fuente_lista = ("Consolas", 16)
 fuente_boton = ("Arial", 16, "bold")
 fuente_archivos = ("Consolas", 15)
 fuente_patron = ("Consolas", 15)
@@ -441,9 +458,15 @@ ips_detectadas = obtener_ips_interfaces()
 patron_var = tk.StringVar(value=patron_guardado)
 patron_seleccionado_var = tk.StringVar(value=patron_seleccionado)
 
-lista_ips = tk.Listbox(root, font=fuente_lista, height=8, selectbackground="#cce6ff")
+lista_ips = tk.Listbox(root, font=fuente_lista, height=6, selectbackground="#cce6ff")
 lista_ips.pack(pady=12, fill=tk.X, padx=40)
 lista_ips.bind("<Double-Button-1>", on_doble_click)
+
+# Menu contextual para copiar IP
+context_menu = tk.Menu(root, tearoff=0)
+context_menu.add_command(label="Copiar IP al portapapeles", command=copiar_ip_menu)
+lista_ips.bind("<Button-3>", mostrar_menu_contextual)  # Para Windows y Linux
+lista_ips.bind("<Button-2>", mostrar_menu_contextual)  # (opcional para Mac)
 
 def inicializar_lista_ips():
     refrescar_lista_ips()

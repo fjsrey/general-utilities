@@ -1,0 +1,114 @@
+<html>
+  <head>
+      <script src="tableColumnReorder.js"></script>
+  </head>
+
+  <style>
+    th.reorder {
+      cursor: move;
+      background-color: #f0f8ff; /* azul claro */
+      position: relative;
+    }
+
+    /* Indicador visual (opcional) con ::after */
+    th.reorder::after {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.9em;
+      color: #555;
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+  </style>
+  <body>
+
+    <table id="miTabla1" border="1">
+      <thead>
+        <tr>
+          <th class="reorder">Nombre*</th>
+          <th>Edad</th>
+          <th>Ciudad</th>
+          <th class="reorder">Código Postal*</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Juan</td>
+          <td>30</td>
+          <td>Sevilla</td>
+          <td>41004</td>
+        </tr>
+        <tr>
+          <td>Ana</td>
+          <td>25</td>
+          <td>Sevilla</td>
+          <td>41700</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <table id="miTabla2" border="2">
+      <thead>
+        <tr>
+          <th>Ingrediente*</th>
+          <th>Número*</th>
+          <th>Gramos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Harina</td>
+          <td>-</td>
+          <td>500</td>
+        </tr>
+        <tr>
+          <td>Manzanas</td>
+          <td>3</td>
+          <td>-</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <table id="miTabla3" border="3">
+      <thead>
+        <tr>
+          <th>Nombre*</th>
+          <th>Teléfono*</th>
+          <th>Hora de llamada*</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Manuel</td><td>654654654</td><td>16:00</td></tr>
+        <tr><td>Francisco</td><td>702555555</td><td>12:00</td></tr>
+      </tbody>
+    </table>
+
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        // Método 1: Indicación de columnas a ordenar usando una clase CSS
+        new TableColumnReorder('miTabla1', {
+          useClass: true,
+          className: 'reorder',
+          allowDropBetweenUnmovable: false
+        });
+
+        // Método 2: Indicación de columnas una por una
+        new TableColumnReorder('miTabla2', {
+          allowedIndexes: [0, 1]  // Solo columna 0 y 1 se pueden mover
+        });
+
+        // Método 3: Todas las columnas son movibles por defecto
+        new TableColumnReorder('miTabla3');  // Todas las columnas se pueden mover
+      });
+    </script>
+
+  </body>
+</html>
